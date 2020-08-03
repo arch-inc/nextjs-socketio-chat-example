@@ -1,0 +1,59 @@
+{
+  "name": "nextjs-socketio-chat-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:ts",
+    "build:all": "npm run build:ts && npm run build:next",
+    "build:ts": "tsc -p tsconfig-server.json",
+    "build:next": "next build",
+    "clean": "npm run clean:ts",
+    "clean:all": "npm run clean:ts && npm run clean:next",
+    "clean:ts": "del-cli ./server/**/*.js ./shared/**/*.js",
+    "clean:next": "del-cli ./.next",
+    "start": "node index.js",
+    "dev": "cross-env NODE_ENV=development APP_ENV=release nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arch-inc/nextjs-socketio-chat-example.git"
+  },
+  "keywords": [
+    "next",
+    "nextjs",
+    "next.js",
+    "socketio",
+    "socket.io",
+    "chat"
+  ],
+  "author": "Jun Kato <i@junkato.jp> (https://junkato.jp)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arch-inc/nextjs-socketio-chat-example/issues"
+  },
+  "homepage": "https://github.com/arch-inc/nextjs-socketio-chat-example#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
+    "@types/socket.io": "^2.1.10",
+    "@types/socket.io-client": "^1.4.33",
+    "@types/ua-parser-js": "^0.7.33",
+    "@types/uuid": "^8.0.0",
+    "cross-env": "^7.0.2",
+    "del-cli": "^3.0.1",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "next": "^9.5.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "ua-parser-js": "^0.7.21",
+    "uuid": "^8.3.0"
+  }
+}
