@@ -4,17 +4,17 @@ import { v4 as uuidv4 } from "uuid";
 
 import page from "./404";
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+page.getInitialProps = async ({ res }) => {
   const uuid = uuidv4();
   if (res) {
     res.writeHead(302, {
       Location: `/rooms/${uuid}`,
     });
     res.end();
-  } else {
-    Router.push(`/rooms/${uuid}`);
+    return {};
   }
-  return { props: {} };
+  Router.push(`/rooms/${uuid}`);
+  return {};
 };
 
 export default page;
