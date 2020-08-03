@@ -13,7 +13,8 @@
     "clean:ts": "del-cli ./server/**/*.js ./shared/**/*.js",
     "clean:next": "del-cli ./.next",
     "start": "node index.js",
-    "dev": "cross-env NODE_ENV=development APP_ENV=release nodemon"
+    "dev": "cross-env NODE_ENV=development APP_ENV=release nodemon",
+    "heroku-postbuild": "npm run build:all"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,10 @@
     "url": "https://github.com/arch-inc/nextjs-socketio-chat-example/issues"
   },
   "homepage": "https://github.com/arch-inc/nextjs-socketio-chat-example#readme",
-  "description": "",
+  "description": "A simple chat using Socket.io and Next.js, written in pure TypeScript",
+  "engines": {
+    "node": "12.x"
+  },
   "devDependencies": {
     "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",

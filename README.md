@@ -1,8 +1,10 @@
 # nextjs-socketio-chat-example
 
-A simple chat using Socket.io and Next.js
+A simple chat using Socket.io and Next.js, written in pure TypeScript.
 
 ## Overview
+
+Demo site: https://nextjs-socketio-chat-example.herokuapp.com/
 
 - `components/`: React components
 - `pages/`: Next.js pages
