@@ -30,12 +30,22 @@ export function createSocketHandler(server: Server) {
      * @param profile - user profile
      */
     function onHello(roomId: string, profile: UserProfileIface) {
-      // const room = server.sockets.adapter.rooms[roomId];
-      // const num = room ? room.length : 0;
-      socket.join(getRoomName(roomId), () => {
+      const roomName = getRoomName(roomId);
+
+      // request to send text logs
+      const room = server.sockets.adapter.rooms[roomName];
+      if (room) {
+        const users = Object.keys(room.sockets);
+        if (users.length > 0) {
+          server.to(users[0]).emit("logs", socket.id);
+        }
+      }
+
+      socket.join(roomName, () => {
         // broadcast "hello" message to room members
-        socket.to(getRoomName(roomId)).emit("hello", profile, socket.id);
+        socket.to(roomName).emit("hello", profile, socket.id);
       });
+
       console.log(
         "somebody joined this session and said hello",
         roomId,
@@ -78,8 +88,24 @@ export function createSocketHandler(server: Server) {
     }
 
     /**
+     * somebody sent logs
+     */
+    function onLogs(socketId: string, logs: TextIface[]) {
+      server.to(socketId).emit("logs-ack", logs);
+      console.log(
+        "somebody sent",
+        Array.isArray(logs) ? logs.length : 0,
+        "logs to",
+        socketId,
+        "sent from",
+        socket.id
+      );
+    }
+
+    /**
      * somebody said something
      * @param roomId - room id
+     * @param message - text message
      */
     function onText(roomId: string, message: string) {
       server.to(getRoomName(roomId)).emit("text", {
@@ -101,6 +127,7 @@ export function createSocketHandler(server: Server) {
     socket.on("hello", onHello);
     socket.on("hello-ack", onHelloAck);
     socket.on("text", onText);
+    socket.on("logs", onLogs);
     socket.on("bye", onBye);
   };
 }

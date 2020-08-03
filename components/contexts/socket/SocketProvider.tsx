@@ -118,16 +118,64 @@ const SocketProvider: FC = ({ children }) => {
   useEffect(() => {
     if (!socket) return;
 
+    /**
+     * somebody sent a message
+     */
     function text(data: TextIface) {
       const logs = textLogs.slice();
       logs.push(data);
       setTextLogs(logs);
     }
 
+    /**
+     * somebody requested logs
+     */
+    function logs(userName: string) {
+      socket.emit("logs", userName, textLogs);
+    }
+
+    /**
+     * somebody sent logs
+     */
+    function logsAck(source: TextIface[]) {
+      const merged: TextIface[] = [];
+      const target = textLogs.slice();
+      while (source.length > 0 || target.length > 0) {
+        // insert the rest
+        if (source.length <= 0) {
+          merged.push(target.shift());
+          continue;
+        } else if (target.length <= 0) {
+          merged.push(source.shift());
+          continue;
+        }
+
+        // insert earlier log
+        let s = source[0],
+          t = target[0];
+        if (s.time > t.time) {
+          merged.push(target.shift());
+          continue;
+        } else if (s.time < t.time) {
+          merged.push(source.shift());
+          continue;
+        }
+
+        // insert either one (same time = duplicate)
+        merged.push(source.shift());
+        target.shift();
+      }
+      setTextLogs(merged);
+    }
+
     socket.on("text", text);
+    socket.on("logs", logs);
+    socket.on("logs-ack", logsAck);
 
     return () => {
       socket.off("text", text);
+      socket.off("logs", logs);
+      socket.off("logs-ack", logsAck);
     };
   }, [socket, roomId, textLogs]);
 
